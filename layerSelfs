@@ -1,0 +1,12 @@
+
+['AlterFieldDefn', 'Clip', 'CommitTransaction', 'CreateFeature', 'CreateField', 'CreateFields', 'CreateGeomField', 'DeleteFeature',
+ 'DeleteField', 'Dereference', 'Erase', 'FindFieldIndex', 'GetDescription', 'GetExtent', 'GetFIDColumn', 'GetFeature',
+ 'GetFeatureCount', 'GetFeaturesRead', 'GetGeomType', 'GetGeometryColumn', 'GetLayerDefn', 'GetMetadata', 'GetMetadataDomainList',
+'GetMetadataItem', 'GetMetadata_Dict', 'GetMetadata_List', 'GetName', 'GetNextFeature', 'GetRefCount', 'GetSpatialFilter',
+'GetSpatialRef', 'GetStyleTable', 'Identity', 'Intersection', 'Reference', 'ReorderField', 'ReorderFields', 'ResetReading',
+'RollbackTransaction', 'SetAttributeFilter', 'SetDescription', 'SetFeature', 'SetIgnoredFields', 'SetMetadata', 'SetMetadataItem'
+, 'SetNextByIndex', 'SetSpatialFilter', 'SetSpatialFilterRect', 'SetStyleTable', 'StartTransaction', 'SymDifference',
+'SyncToDisk', 'TestCapability', 'Union', 'Update', '__bool__', '__class__', '__delattr__', '__dict__', '__doc__', '__format__',
+'__getattribute__', '__getitem__', '__hash__', '__init__', '__iter__', '__len__', '__module__', '__new__', '__nonzero__',
+'__reduce__', '__reduce_ex__', '__repr__', '__setattr__', '__sizeof__', '__str__', '__subclasshook__', '__weakref__',
+     'next', 'schema', 'this', 'thisown']

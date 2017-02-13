@@ -23,15 +23,14 @@ class Shapefile(object):
     """获取要素的地理信息 以及获取要素的属性信息
     0.循环函数,只执行一次,保存到全局变量中
     1.Returns:
-        点:[[x,y],[x,y],.....]
-        线:[[[x,y],[x,y],[x,y]],...]
-        面:[[[[x,y],[x,y],[x,y]],[要素2]]],...,...]
-        多面层级关系:
-            0:点
-            1:位置
-            2:面
-            3:保存多个面
-            4:要素
+        返回一个字典{type:'类型',coordinates:[要素]}
+        具体类型如下:
+            Point 点:[x,y],[x,y]
+            MultiPoint 多点: TODO
+            LineString 线:[ [x,y],[x,y],[x,y] ]
+            MultiLineString 多线: TODO
+            Polygon 面:[ [[x,y],[x,y],[x,y]],[面要素2], ... ]
+            MultiPolygon 多面:[ [[[x,y],[x,y],[x,y]]],[[[x,y],[x,y],[x,y]]], .... ]
     2.Returns:
         [['a','b','c'],[],[]]属性值列表
     """
@@ -49,7 +48,8 @@ class Shapefile(object):
             self.attributes.append(fieldListTemp)
             # 获取要素中的几何体
             geometry = feature.GetGeometryRef()
-            self.geometrys.append(json.loads(geometry.ExportToJson())['coordinates'])
+            print geometry.ExportToJson()
+            self.geometrys.append(json.loads(geometry.ExportToJson()))
             feature.Destroy()
 
     def getGeometryInfo(self):
@@ -69,11 +69,10 @@ class Shapefile(object):
     def getTableInfo(self):
         listOut = []
         defn = self.layer.GetLayerDefn()
-        iFieldCount = defn.GetFieldCount()
-        for index in range(iFieldCount):
-            oField = defn.GetFieldDefn(index)
-            # print oField.GetFieldTypeName(oField.GetType())
-            listOut.append(oField.GetNameRef())
+        fieldCount = defn.GetFieldCount()
+        for index in range(fieldCount):
+            field = defn.GetFieldDefn(index)
+            listOut.append(field.GetNameRef())
             # print '%s: %s(%d.%d)' % (oField.GetNameRef(),oField.GetFieldTypeName(oField.GetType()),oField.GetWidth(),oField.GetPrecision())
         return listOut
 
@@ -90,11 +89,15 @@ class Shapefile(object):
 
 #执行测试区域
 if __name__=='__main__':
-    shp = Shapefile('D:\\GIS数据\\china\\China.shp')
+    # shp = Shapefile('D:\\GIS数据\\china\\China.shp')
     # shp = Shapefile('F:\\PYX\\data\\road_1.shp')
+    shp = Shapefile('F:\\PYX\\data\\node.shp')
     # shp.getFeaturesInfo()
     # shp.getMapInfo()
     # shp.getAttributeInfo()
     # print str(shp.getTableInfo()).decode('string_escape') #一种方法
-    print len(shp.getGeometryInfo()[0][0][0])
+    print shp.getGeometryInfo()
+
+    # print shp.getAttributeInfo()
+
     shp.delete()

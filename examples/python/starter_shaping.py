@@ -11,7 +11,7 @@ from traceback import print_tb
 from PDFlib.PDFlib import *
 
 # This is where the data files are. Adjust as necessary.
-searchpath = "../data"
+searchpath = "F:\\PDFlib\\examples\\data"
 outfile = "starter_shaping.pdf"
 llx = 50.0
 lly = 50.0
@@ -28,7 +28,7 @@ def make_shaping_dict(x):
 shapingsamples = map(
     make_shaping_dict,
     [
-	# -------------------------- Arabic -------------------------- 
+	# -------------------------- Arabic --------------------------
 	[ "ScheherazadeRegOT", "shaping script=arab", 0, "Arabic",
 	"&#x0627;&#x0644;&#x0639;&#x064E;&#x0631;&#x064E;&#x0628;&#x0650;"
 	"&#x064A;&#x0629;" ],
@@ -91,7 +91,7 @@ shapingsamples = map(
 	"&#x0020;&#x05D0;&#x05D7;&#x05D5;&#x05D4;&#x002E;"
 	],
 
-	# -------------------------- Hindi -------------------------- 
+	# -------------------------- Hindi --------------------------
 	[ "raghu8", "shaping script=deva", 1, "Hindi",
 	  "&#x0939;&#x093F;&#x0928;&#x094D;&#x0926;&#x0940;"
 	],
@@ -223,9 +223,9 @@ try:
            "colwidth=" + percentage )
         table = p.add_table_cell(table, col, row, header, optlist)
         col += 1
-        
+
     row += 1
-    
+
     # Create shaping samples
     for shapingsample in shapingsamples:
         col=1
@@ -246,7 +246,7 @@ try:
         table = p.add_table_cell(table, col, row, "", optlist)
 
         col += 1
-        
+
         # Column 3: shaped and reordered text (Textline or Textflow)
         if (shapingsample["textflow"]):
             optlist = (
@@ -263,7 +263,7 @@ try:
                    (shapingsample["fontname"], shapingsample["optlist"]))
             table = p.add_table_cell(table, col, row,
                      shapingsample["text"], optlist)
-            
+
         row += 1
 
     # ---------- Place the table on one or more pages ----------

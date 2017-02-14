@@ -14,7 +14,7 @@ width = 500.0
 height = 770.0
 
 infile = "reference.pdf"
-searchpath = "../data"
+searchpath = "F:\\PDFlib\\examples\\data"
 
 p = PDFlib()
 

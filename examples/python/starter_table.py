@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# Id: starter_table.pl,v 1.1 2006/08/30 20:31:09 rjs Exp 
+# Id: starter_table.pl,v 1.1 2006/08/30 20:31:09 rjs Exp
 #
 # Table starter:
 # Create table which may span multiple pages
@@ -12,7 +12,7 @@ from traceback import print_tb
 from PDFlib.PDFlib import *
 
 # This is where the data files are. Adjust as necessary.
-searchpath = "../data"
+searchpath = "F:\\PDFlib\\examples\\data"
 imagefile = "nesrin.jpg"
 outfilename = "starter_table.pdf"
 
@@ -138,7 +138,7 @@ try:
         p.begin_page_ext(0, 0, "width=a4.width height=a4.height")
 
         # Shade every other row; draw lines for all table cells.
-        # Add "showcells showborder" to visualize cell borders 
+        # Add "showcells showborder" to visualize cell borders
         optlist = "header=1 rowheightdefault=auto " + \
         "fill={{area=rowodd fillcolor={gray 0.9}}} stroke={{line=other}}"
 

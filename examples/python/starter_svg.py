@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# Id: starter_svg.py,v 1.1 2013/01/22 21:35:50 rjs Exp 
+# Id: starter_svg.py,v 1.1 2013/01/22 21:35:50 rjs Exp
 #
 # Starter SVG:
 # Load SVG graphics and fit into a box
@@ -8,7 +8,7 @@
 # Required data: SVG graphics
 
 
-searchpath = "../data"
+searchpath = "F:\\PDFlib\\examples\\data"
 outfile = "starter_svg.pdf"
 
 graphicsfile = "PDFlib-logo.svg"

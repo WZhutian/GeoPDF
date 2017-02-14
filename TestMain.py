@@ -10,20 +10,17 @@ Thor = PDFlib()
 Shp_List = []
 Shp_List.append(Shapefile('F:\\PYX\\data\\node.shp'))
 Shp_List.append(Shapefile('F:\\PYX\\data\\road_1.shp'))
-# ...
 documentName = "hello.pdf"
-pageX = 1000 # 页面宽度
-pageY = 1000 # 页面高度
-###############################################################################################
+
 try:
     # 设置异常处理,检查返回项
     Thor.set_option("errorpolicy=return")
     # 文档开始(设置图层默认打开) 添加新页面
     if Thor.begin_document(documentName, "openmode=layers") == -1:
         raise Exception("Error: " + Thor.get_errmsg())
-
-    Thor.begin_page_ext(pageX, pageY, "")
+    Thor.begin_page_ext(595, 842, "")
     #缩放
+    Thor.translate(100,100)
     Thor.scale(0.5,0.5)
     # 画线
     Thor.setcolor("stroke", "rgb", 0.0, 0.5, 0.5, 0.0)

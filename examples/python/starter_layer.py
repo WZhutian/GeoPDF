@@ -17,7 +17,7 @@ from traceback import print_tb
 from PDFlib.PDFlib import *
 
 # This is where the data files are. Adjust as necessary. 
-searchpath = "../data"
+searchpath = "F:\\PDFlib\\examples\\data"
 outfile = "starter_layer.pdf"
 
 rgb = "nesrin.jpg"

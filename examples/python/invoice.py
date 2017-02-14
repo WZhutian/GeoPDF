@@ -12,7 +12,7 @@ import time
 infile = "stationery.pdf"
 
 # This is where font/image/PDF input files live. Adjust as necessary.
-searchpath = "../data"
+searchpath = "F:\\PDFlib\\examples\\data"
 
 left = 55
 right = 530

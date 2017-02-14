@@ -14,7 +14,7 @@
 # Required data: none
 
 # This is where the data files are. Adjust as necessary.
-searchpath = "../data"
+searchpath = "F:\\PDFlib\\examples\\data"
 outfile = "starter_graphics.pdf"
 
 xt=20

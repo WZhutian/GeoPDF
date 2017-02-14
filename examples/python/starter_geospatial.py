@@ -15,7 +15,7 @@ from traceback import print_tb
 from PDFlib.PDFlib import *
 
 # This is where the data files are. Adjust if necessary.
-searchpath = "../data"
+searchpath = "F:\\PDFlib\\examples\\data"
 outfile = "starter_geospatial.pdf"
 imagefile = "munich.png"
 

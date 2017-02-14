@@ -19,7 +19,7 @@
 #
 
 
-searchpath = "../data"
+searchpath = "F:\\PDFlib\\examples\\data"
 outfile = "starter_color.pdf"
 
 y = 800

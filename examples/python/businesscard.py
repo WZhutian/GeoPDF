@@ -15,7 +15,7 @@ infile = "boilerplate.pdf"
 # Note that this directory must also contain the LuciduxSans font outline
 # and metrics files.
 #
-searchpath = "../data"
+searchpath = "F:\\PDFlib\\examples\\data"
 
 data_name = [
  "name",

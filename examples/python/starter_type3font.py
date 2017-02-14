@@ -18,7 +18,7 @@ from PDFlib.PDFlib import *
 p = PDFlib()
 
 # This is where the data files are. Adjust as necessary.
-searchpath = "../data"
+searchpath = "F:\\PDFlib\\examples\\data"
 outfile = "starter_type3font.pdf"
 
 try:

@@ -48,7 +48,7 @@ class Shapefile(object):
             self.attributes.append(fieldListTemp)
             # 获取要素中的几何体
             geometry = feature.GetGeometryRef()
-            print geometry.ExportToJson()
+            # print geometry.ExportToJson()
             self.geometrys.append(json.loads(geometry.ExportToJson()))
             feature.Destroy()
 
@@ -90,8 +90,8 @@ class Shapefile(object):
 #执行测试区域
 if __name__=='__main__':
     # shp = Shapefile('D:\\GIS数据\\china\\China.shp')
-    # shp = Shapefile('F:\\PYX\\data\\road_1.shp')
-    shp = Shapefile('F:\\PYX\\data\\node.shp')
+    shp = Shapefile('F:\\PYX\\data\\road_1.shp')
+    # shp = Shapefile('F:\\PYX\\data\\node.shp')
     # shp.getFeaturesInfo()
     # shp.getMapInfo()
     # shp.getAttributeInfo()

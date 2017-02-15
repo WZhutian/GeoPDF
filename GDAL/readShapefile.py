@@ -93,10 +93,11 @@ if __name__=='__main__':
     shp = Shapefile('F:\\PYX\\data\\road_1.shp')
     # shp = Shapefile('F:\\PYX\\data\\node.shp')
     # shp.getFeaturesInfo()
-    # shp.getMapInfo()
+    # print type(shp.getMapInfo()[0].ExportToWkt())
+    # print dir(shp.getMapInfo()[0])
     # shp.getAttributeInfo()
     # print str(shp.getTableInfo()).decode('string_escape') #一种方法
-    print shp.getGeometryInfo()
+    # print shp.getGeometryInfo()
 
     # print shp.getAttributeInfo()
 

@@ -1,86 +1,139 @@
-# -*- coding: utf-8 -*-
-from sys import exc_info
-from traceback import print_tb
-from PDFlib.PDFlib import *
-from GDAL.readShapefile import *
-# 定制选项
-# 创建 PDFlib 和 Shapefile 对象
-# 填写生成的PDF名称
-Thor = PDFlib()
-Shp_List = []
-Shp_List.append(Shapefile('F:\\PYX\\data\\node.shp'))
-Shp_List.append(Shapefile('F:\\PYX\\data\\road_1.shp'))
-documentName = "hello.pdf"
+/* $Id: starter_geospatial.java,v 1.5 2016/06/29 07:34:59 stm Exp $
+ * Starter for georeferenced PDF:
+ * Import an image with a map and add geospatial reference information
+ *
+ * Sample map and coordinates:
+ * We use a map from www.openstreetmap.com; the geospatial coordinates of the
+ * image edges were also provided by that Web site.
+ * The coordinate system is WGS84 which is also used for GPS.
+ *
+ * Required software: PDFlib/PDFlib+PDI/PPS 9
+ * Required data: image file and associated geospatial reference information
+ */
 
-try:
-    # 设置异常处理,检查返回项
-    Thor.set_option("errorpolicy=return")
-    # 文档开始(设置图层默认打开) 添加新页面
-    if Thor.begin_document(documentName, "openmode=layers") == -1:
-        raise Exception("Error: " + Thor.get_errmsg())
-    Thor.begin_page_ext(595, 842, "")
-    #缩放
-    Thor.translate(100,100)
-    Thor.scale(0.5,0.5)
-    # 画线
-    Thor.setcolor("stroke", "rgb", 0.0, 0.5, 0.5, 0.0)
-    Thor.moveto(0, 0)
-    Thor.lineto(200, 600)
-    Thor.stroke()
+package com.pdflib.cookbook.pdflib.geospatial;
 
-    # 画点(圆)
-    Thor.setcolor("fill", "rgb", 0.0, 0.85, 0.85, 0.0)
-    Thor.circle(100,500,10)
-    Thor.fill()
+import com.pdflib.pdflib;
+import com.pdflib.PDFlibException;
 
-    # 画面(凸多边形)
-    path = -1
-    path = Thor.add_path_point(path,0,0,'line','name=base')
-    path = Thor.add_path_point(path,100,0,'line','')
-    path = Thor.add_path_point(path,200,-25,'line','')
-    path = Thor.add_path_point(path,0,-25,'line','')
-    path = Thor.add_path_point(path,0,0,'line','')
+class starter_geospatial {
+    public static void main(String argv[]) {
+        /* This is where the data files are. Adjust if necessary. */
+        final String searchpath = "../input";
+        final String outfile = "starter_geospatial.pdf";
 
-    Thor.draw_path(path, 200, 600,
-        "stroke linewidth=3 fill fillcolor=Turquoise "
-        "linecap=projecting attachmentpoint=base ")# 起始点闭合 选择开始点
+        String pageoptlist;
+        pdflib p = null;
+        int image;
+        final String imagefile = "munich.png";
+        double mapwidth, mapheight;
+        int exitcode = 0;
 
-    # 画面(凹多边形) TODO
+        /* WKT for plain latitude/longitude values in WGS84 */
+        final String georefsystem = "worldsystem={type=geographic wkt={"
+            + "GEOGCS[\"WGS 84\","
+            + "  DATUM[\"WGS_1984\", SPHEROID[\"WGS 84\", 6378137,298.257223563]],"
+            + "  PRIMEM[\"Greenwich\", 0.0],"
+            + "  UNIT[\"Degree\", 0.01745329251994328]]"
+            + "}} linearunit=M areaunit=SQM angularunit=degree";
 
-    # 添加属性 TODO
+        /* world coordinates of the image (in degrees) */
+        double worldpoints[] = {
+            48.145, /* latitude of top edge */
+            11.565, /* longitude of left edge */
+            11.59, /* longitude of right edge */
+            48.13 /* latitude of bottom edge */
+        };
 
-    # 添加交互 TODO
+        try {
+            p = new pdflib();
 
-    # 搜索字体
-    font = Thor.load_font(u"宋体","unicode", "")
-    if font == -1:
-        raise PDFlibException("Error: " + Thor.get_errmsg())
-    # 添加文字
-    Thor.set_text_pos(50, 700)
-    Thor.setfont(font, 24)
-    Thor.show(u"Hello world!搜索")
+            p.set_option("searchpath={" + searchpath + "}");
 
-    # 图层
-    layer0 = Thor.define_layer(u"文字", "");
-    Thor.begin_layer(layer0);
-    Thor.end_layer();
+            /* This means we must check return values of load_font() etc. */
+            p.set_option("errorpolicy=return");
 
-    # 页面结束 文档结束
-    Thor.end_page_ext("")
-    Thor.end_document("")
+            /* Start the document */
+            if (p.begin_document(outfile, "compatibility=1.7ext3") == -1) {
+                throw new Exception("Error: " + p.get_errmsg());
+            }
 
-# 错误处理 --------固定不动
-except PDFlibException:
-    print("PDFlib exception occurred:\n[%d] %s: %s" %
-	((Thor.get_errnum()), Thor.get_apiname(),  Thor.get_errmsg()))
-    print_tb(exc_info()[2])
+            p.set_info("Creator", "PDFlib starter sample");
+            p.set_info("Title", "starter_geospatial $Revision: 1.5 $");
 
-except Exception:
-    print("Exception occurred: %s" % (exc_info()[0]))
-    print_tb(exc_info()[2])
+            /* Load the map image */
+            image = p.load_image("auto", imagefile, "");
+            if (image == -1)
+            {
+                System.err.println("Error: " + p.get_errmsg());
+                System.exit(2);
+            }
 
-finally:
-    Thor.delete()
-    #这里添加shapefile对象的删除处理
-    for a in Shp_List:
-        a.delete()
+            /* Retrieve image width and height */
+            mapwidth = p.info_image(image, "imagewidth", "");
+            mapheight = p.info_image(image, "imageheight", "");
+
+            /* Generate georeference option list */
+            pageoptlist = "";
+            pageoptlist += "viewports={{ georeference={";
+            pageoptlist += georefsystem + " ";
+
+            /* Use the four corners as reference points; (0,0)=lower left etc. */
+            pageoptlist += "mappoints={0 0  1 0  1 1  0 1} ";
+
+            /*
+             * The following can be used as a workaround for a problem with the
+             * Avenza PDF Maps app on Android; otherwise the (almost) default
+             * bounds values can be skipped:
+             *
+             * pageoptlist += "bounds={0.000001 0 0 1 1 1 1 0} ";
+             */
+
+            pageoptlist += "worldpoints={";
+
+            /* lower left corner */
+            pageoptlist += worldpoints[3] + " " + worldpoints[1] + " ";
+            /* lower right corner */
+            pageoptlist += worldpoints[3] + " " + worldpoints[2] + " ";
+            /* upper right corner */
+            pageoptlist += worldpoints[0] + " " + worldpoints[2] + " ";
+            /* upper left corner */
+            pageoptlist += worldpoints[0] + " " +  worldpoints[1] + " ";
+
+            pageoptlist += "} } ";
+
+            pageoptlist += "boundingbox={0 0 ";
+            pageoptlist += mapwidth + " " + mapheight;
+            pageoptlist += "} } }";
+
+            /* Create a page with geospatial reference information. */
+            p.begin_page_ext(mapwidth, mapheight, pageoptlist);
+
+            /* Place the map on the lower left corner of the page */
+            String optlist = "adjustpage boxsize={";
+            optlist += mapwidth + " " + mapheight;
+            optlist += "}";
+            p.fit_image(image, 0, 0, optlist);
+
+            p.end_page_ext("");
+
+            p.end_document("");
+        }
+        catch (PDFlibException e) {
+            System.err.print("PDFlib exception occurred:\n");
+            System.err.print("[" + e.get_errnum() + "] " + e.get_apiname()
+                    + ": " + e.get_errmsg() + "\n");
+            exitcode = 1;
+        }
+        catch (Exception e) {
+            System.err.println(e.getMessage());
+            exitcode = 1;
+        }
+        finally {
+            if (p != null) {
+                p.delete();
+            }
+            System.exit(exitcode);
+        }
+    }
+}

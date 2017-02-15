@@ -49,23 +49,58 @@ def painter(type,data,scaleX,scaleY):
 try:
     # 设置异常处理,检查返回项
     Thor.set_option("errorpolicy=return")
-    # 文档开始(设置图层默认打开) 添加新页面
-    if Thor.begin_document(documentName, "openmode=layers") == -1:
+    # 文档开始(设置图层默认打开 , 设置PDF版本) 添加新页面
+    if Thor.begin_document(documentName, "openmode=layers compatibility=1.7ext3") == -1:
         raise Exception("Error: " + Thor.get_errmsg())
-    Thor.begin_page_ext(pageX, pageY, "")
 #########################
-    # 遍历一遍 shpList ,获取最大区间 (假设只按照经纬度来进行度量 TODO)
+#Step1 遍历一遍 shpList ,获取最大区间 (假设只按照经纬度来进行度量 TODO)
     maxRangeList = [1000,-1000,1000,-1000]
     for a in range(len(shpList)):
         maxRangeList[0] = min(maxRangeList[0], shpList[a].getMapInfo()[1][0])
         maxRangeList[1] = max(maxRangeList[1], shpList[a].getMapInfo()[1][1])
         maxRangeList[2] = min(maxRangeList[2], shpList[a].getMapInfo()[1][2])
         maxRangeList[3] = max(maxRangeList[3], shpList[a].getMapInfo()[1][3])
-    # 设置坐标原点以及缩放倍数
+    print maxRangeList
+#Step2 设置PDF的空间位置信息 (作用于PDF的地理空间位置工具)
+    # 设置wkt信息 (这里默认使用第一个shp的wkt信息 TODO)
+    georefsystem = "worldsystem={type=geographic wkt="
+    georefsystem += shpList[0].getMapInfo()[0].ExportToWkt()
+    georefsystem += "} linearunit=M areaunit=SQM angularunit=degree"
+    print georefsystem
+
+    pageoptlist = "" # 地理数据选项列表
+    pageoptlist += "viewports={{ georeference={"
+    pageoptlist += georefsystem + " "
+    # 设置四角位置的顺序
+    pageoptlist += "mappoints={0 0  1 0  1 1  0 1} "
+    # """
+    # /*
+    #  * The following can be used as a workaround for a problem with the
+    #  * Avenza PDF Maps app on Android; otherwise the (almost) default
+    #  * bounds values can be skipped:
+    #  *
+    #  * pageoptlist += "bounds={0.000001 0 0 1 1 1 1 0} "
+    #  */
+    # """
+    pageoptlist += "worldpoints={"
+    # 按照下左,下右,上右,上左的顺序填写
+    pageoptlist += str(maxRangeList[2]) + " " + str(maxRangeList[0]) + " "
+    pageoptlist += str(maxRangeList[2]) + " " + str(maxRangeList[1]) + " "
+    pageoptlist += str(maxRangeList[3]) + " " + str(maxRangeList[1]) + " "
+    pageoptlist += str(maxRangeList[3]) + " " +  str(maxRangeList[0]) + " "
+    pageoptlist += "} } "
+    # 设置显示地理坐标位置的范围信息
+    pageoptlist += "boundingbox={0 0 "
+    pageoptlist += str(pageX) + " " + str(pageY)
+    pageoptlist += "} } }"
+    print pageoptlist
+    Thor.begin_page_ext(pageX, pageY, pageoptlist)
+
+#Step3 设置坐标原点以及缩放倍数
     scaleX = pageX / abs(maxRangeList[1] - maxRangeList[0])
     scaleY = pageY / abs(maxRangeList[3] - maxRangeList[2])
     Thor.translate(-maxRangeList[0] * scaleX, -maxRangeList[2] * scaleY) # 需要反方向移动,故设为负
-    # 画图像
+#Step4 画图像
     for a in range(len(shpList)):
         geometryList = shpList[a].getGeometryInfo()
         # 图层, 以文件名作为图层名 (测试中文文件名 TODO)

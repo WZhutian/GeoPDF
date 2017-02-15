@@ -24,7 +24,7 @@ try:
 
     Thor.begin_page_ext(pageX, pageY, "")
     #缩放
-    Thor.scale(0.5,0.5)
+    # Thor.scale(0.5,0.5)
     # 画线
     Thor.setcolor("stroke", "rgb", 0.0, 0.5, 0.5, 0.0)
     Thor.moveto(0, 0)
@@ -38,13 +38,12 @@ try:
 
     # 画面(凸多边形)
     path = -1
-    path = Thor.add_path_point(path,0,0,'line','name=base')
-    path = Thor.add_path_point(path,100,0,'line','')
-    path = Thor.add_path_point(path,200,-25,'line','')
-    path = Thor.add_path_point(path,0,-25,'line','')
-    path = Thor.add_path_point(path,0,0,'line','')
+    path = Thor.add_path_point(path,500,500,'move','')
+    path = Thor.add_path_point(path,500,400,'line','')
+    path = Thor.add_path_point(path,600,500,'line','name=base')
+    path = Thor.add_path_point(path,500,500,'line','')
 
-    Thor.draw_path(path, 200, 600,
+    Thor.draw_path(path, 600, 500,
         "stroke linewidth=3 fill fillcolor=Turquoise "
         "linecap=projecting attachmentpoint=base ")# 起始点闭合 选择开始点
 
